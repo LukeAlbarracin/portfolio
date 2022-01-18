@@ -1,14 +1,6 @@
-# Page_tile
+## Objective
 
-## Section1
-Text one two there
+Seeking an interdisciplinary internship or co-op in building on my current strengths and experiential learning.
 
-### Sub-section1.1
-
-## Section2
-
-### Sub-section2.1
-
-more text
-
+Passionate about how Philosophy and Computer Science blend to solve real world problems.
 

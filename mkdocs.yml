@@ -1,7 +1,7 @@
-site_name: xyz
+site_name: Luke Albarracin
 nav:
-  - 'Home': index.md
-  - 'Projects': projects.md
+- 'About Me' : index.md
+- 'Projects' : projects.md
 
 theme:
   name: material
