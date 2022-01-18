@@ -1,4 +1,7 @@
 site_name: xyz
 nav:
-- 'Home' : index.md
+  - 'Home': index.md
+
+theme:
+  name: material
 
