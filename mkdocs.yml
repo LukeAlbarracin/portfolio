@@ -1,6 +1,7 @@
 site_name: xyz
 nav:
   - 'Home': index.md
+  - 'Projects': projects.md
 
 theme:
   name: material

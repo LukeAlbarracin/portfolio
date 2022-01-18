@@ -26,4 +26,4 @@ jobs:
       - name: deploy
         run: |
           git pull
-          mkdocs gh-deploy
+          mkdocs gh-deploy --force
