@@ -1,4 +1,5 @@
-name: auto build and deploy
+# https://github.com/stefnestor/demo_mkdocs/blob/f1e247f7e5afcf19c77d9360b82686639f3a01fc/.github/workflows/docs.yml
+name: docs
 
 on:
   push:
@@ -22,9 +23,11 @@ jobs:
       - name: install dependencies
         run: |
           python -m pip install --upgrade pip
+	  pip install -U git+https://github.com/mkdocs/mkdocs.git#egg=mkdocs
           pip install mkdocs-material
 
       - name: deploy
         run: |
           git pull
           mkdocs gh-deploy --force
+	  mkdocs --version
