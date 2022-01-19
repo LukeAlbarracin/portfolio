@@ -1,7 +1,7 @@
 # Full-Stack Android/Java App (OOP) with Natural Language Processing (NLP)
 
 A Quizlet inspired flashcard application which uses NLP to generate questions
-* Aims to convert a declarative statement to a question for flashcard studying purposes
+<p> Aims to convert a declarative statement to a question for flashcard studying purposes </p>
 
 * [Java Frontend with NLP for Android](https://github.com/LukeAlbarracin/QuizMaster)
 * [Sprint Boot Backend using GCP with NLP](projects/quizback.md)
