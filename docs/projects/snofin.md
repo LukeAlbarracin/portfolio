@@ -4,6 +4,9 @@
 , which is a Java library that utilizes ASTs and aims to allow interopability between programming languages. </p>
 <p>
 Because of this, I sought out this mini project, to see how simple it is to execute python shell commands in Clojure, thus creating this app. I chose Python because for my computer science club, that was the language that many kids aimed to learn. </p>
+###1. `Clojure` - Execute Python, JSON, and Websockets
+[Source: Websockets.clj](https://github.com/LukeAlbarracin/snofin-web-cljs/blob/master/src/multi_client_ws/routes/websockets.clj)
+<p> Executes Python, using a Java Library (Clojure has Java interop). The results from whatever Python was executed is parsed out, then sent over to the client via websockets using <a href="https://http-kit.github.io/"> http-kit</a>. This data is sent over in JSON format.</p>
 ```Clojure
 (defn- execute-python! [msg]
   "Runs a python shell"
@@ -16,7 +19,9 @@ Because of this, I sought out this mini project, to see how simple it is to exec
         (doseq [channel @channels]
           (send! channel (error->json (:err result))))))))
 ```
-
+###2. `ClojureScript` - Reagent and UI
+[Source: Core.cljs](https://github.com/LukeAlbarracin/snofin-web-cljs/blob/master/src-cljs/multi_client_ws/core.cljs)
+<p><a href="https://github.com/reagent-project/reagent"> Reagent </a> is a minimalistic interface between ClojureScript (CLJS) and React. React components can be composed using CLJS functions and data in hiccup-format. In this project, a button is designed to send over values from an input field via websockets. </p>
 ```Clojure
 (defn home-page [{:keys [message]}]
   [:div.container
@@ -43,8 +48,10 @@ Because of this, I sought out this mini project, to see how simple it is to exec
        ]
      ]]])
 ```
-
-```java
+###3. `Clojure` - JSON Parsing in Clojure
+[Source: Websockets.clj](https://github.com/LukeAlbarracin/snofin-web-cljs/blob/master/src/multi_client_ws/routes/websockets.clj)
+<p>Converts a JSON-encoded map into a Clojure string utilizing Java interop and the <a href="https://github.com/cognitect/transit-clj">Transit</a> library. </p>
+```Clojure
 (defn- json->clj [msg]
   "Converts a JSON-encoded map into a clojure string (clojure.java.string)"
   (as-> msg result
