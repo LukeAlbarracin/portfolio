@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.7">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
     
     
       
@@ -17,7 +17,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.cd566b2a.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6e60f8b8.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -254,19 +254,18 @@
 
 <p>
 Taking influence from learning dynamic programming from Clojure, I sought to take utilize memoization. I rearranged the function passed in, pointing the return value into a variable called '_memoize'. This value in theory would be stored for the next loop, where recursion was mocked. I had hoped this would prevent stuff from being added to the stack. Although this compiled and returned the correct value, there were several key flaws in it that proved unsolvable. Regardless, it was a great learning experience and introduced me to the world of token parsing and Abstract Syntax Trees (ASTs). </p>
-
-<pre><code class="language-Rust">macro_rules! recur_fn {
-    ($fpointer:ident ($($pname:ident : $type:ty),*) -&gt; $rtrn_type:ty $fbody:block) =&gt; 
-        (fn $fpointer ($($pname : $type),*) -&gt; $rtrn_type {
-            let mut _memoize = (true,$($pname),*);
-            while _memoize.0 {
-                fn recur (repeat:bool,$($pname:$type),*) -&gt; (bool,$($type),*) {(true,$($pname),*)}
-                _memoize = {$fbody};
-            }
-            fn arb_fn ($($pname : $type),*) -&gt; $rtrn_type {$fbody}
-    });
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">macro_rules!</span><span class="w"> </span><span class="n">recur_fn</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="p">(</span><span class="cp">$fpointer</span>:<span class="nc">ident</span><span class="w"> </span><span class="p">(</span><span class="cp">$($pname</span>:<span class="nc">ident</span><span class="w"> </span>: <span class="cp">$type</span>:<span class="nc">ty</span><span class="p">),</span><span class="o">*</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="cp">$rtrn_type</span>:<span class="nc">ty</span><span class="w"> </span><span class="cp">$fbody</span>:<span class="nc">block</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="p">(</span><span class="k">fn</span> <span class="cp">$fpointer</span><span class="w"> </span><span class="p">(</span><span class="cp">$($pname</span><span class="w"> </span>: <span class="cp">$type</span><span class="p">),</span><span class="o">*</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="cp">$rtrn_type</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">_memoize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="cp">$($pname</span><span class="p">),</span><span class="o">*</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="n">_memoize</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">                </span><span class="k">fn</span> <span class="nf">recur</span><span class="w"> </span><span class="p">(</span><span class="n">repeat</span>:<span class="kt">bool</span><span class="p">,</span><span class="cp">$($pname</span>:<span class="cp">$type</span><span class="p">),</span><span class="o">*</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="p">(</span><span class="kt">bool</span><span class="p">,</span><span class="cp">$($type</span><span class="p">),</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="p">{(</span><span class="kc">true</span><span class="p">,</span><span class="cp">$($pname</span><span class="p">),</span><span class="o">*</span><span class="p">)}</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">                </span><span class="n">_memoize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="cp">$fbody</span><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">            </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">            </span><span class="k">fn</span> <span class="nf">arb_fn</span><span class="w"> </span><span class="p">(</span><span class="cp">$($pname</span><span class="w"> </span>: <span class="cp">$type</span><span class="p">),</span><span class="o">*</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="cp">$rtrn_type</span><span class="w"> </span><span class="p">{</span><span class="cp">$fbody</span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="p">});</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 
               
             </article>
@@ -300,7 +299,7 @@ Taking influence from learning dynamic programming from Clojure, I sought to tak
     <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.22074ed6.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.01de222e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.960e086b.min.js"></script>
       
     
   </body>

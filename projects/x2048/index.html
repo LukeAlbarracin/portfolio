@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.7">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
     
     
       
@@ -17,7 +17,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.cd566b2a.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6e60f8b8.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -241,11 +241,10 @@
 <p> This uses <strong>macros</strong>, which in Clojure, aid as a powerful tool of extension. For this macro, it is used for the game 2048. In order, to calculate the board from user input, it is quite often rotated and flattened from 2D to 1D form. A change is this implemented in a particular square in this form. Then, the board must be brought back to its original 2D form, and rotated back, in that particular order. Thus, this macro serves to rotate, then flatten, initiate a change, unflatten, and rotate in the opposite direction, taking functions as passed in parameters for evaluation to achieve this feat. </p>
 
 <p> In short: This macro prevents having to call rotate, flatten, single element change, unflatten, and rotate in reverse methods for different scenarios. This works ubiquitously in any rotated positioning. </p>
-
-<pre><code class="language-Clojure">(defmacro back-and-forth 
-  &quot;Powerful macro that returns the grid to its natural state after rotating it&quot;
-  ([f1 f2] `(-&gt;&gt; (grid-2d) ~@f1 ~@f2 (shift-grid) ~@f2 ~@f1 (flatten))))
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">(</span><span class="kd">defmacro </span><span class="nv">back-and-forth</span> 
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="s">&quot;Powerful macro that returns the grid to its natural state after rotating it&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  <span class="p">([</span><span class="nv">f1</span> <span class="nv">f2</span><span class="p">]</span> <span class="o">`</span><span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">grid-2d</span><span class="p">)</span> <span class="o">~@</span><span class="nv">f1</span> <span class="o">~@</span><span class="nv">f2</span> <span class="p">(</span><span class="nf">shift-grid</span><span class="p">)</span> <span class="o">~@</span><span class="nv">f2</span> <span class="o">~@</span><span class="nv">f1</span> <span class="p">(</span><span class="nf">flatten</span><span class="p">))))</span>
+</code></pre></div>
 
               
             </article>
@@ -279,7 +278,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.22074ed6.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.01de222e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.960e086b.min.js"></script>
       
     
   </body>

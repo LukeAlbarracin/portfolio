@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.7">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
     
     
       
@@ -17,7 +17,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.cd566b2a.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6e60f8b8.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -221,6 +221,35 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-clojure-execute-python-json-and-websockets" class="md-nav__link">
+    1. Clojure - Execute Python, JSON, and Websockets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-clojurescript-reagent-and-ui" class="md-nav__link">
+    2. ClojureScript - Reagent and UI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-clojure-json-parsing-in-clojure" class="md-nav__link">
+    3. Clojure - JSON Parsing in Clojure
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -238,53 +267,61 @@
 , which is a Java library that utilizes ASTs and aims to allow interopability between programming languages. </p>
 <p>
 Because of this, I sought out this mini project, to see how simple it is to execute python shell commands in Clojure, thus creating this app. I chose Python because for my computer science club, that was the language that many kids aimed to learn. </p>
-
-<pre><code class="language-Clojure">(defn- execute-python! [msg]
-  &quot;Runs a python shell&quot;
-  (let [result (shell/sh &quot;python&quot; &quot;-c&quot; (json-&gt;clj msg))]
-    (if (str/blank? (:err result))
-      (do
-        (doseq [result (str/split (:out result) #&quot;\n&quot;) channel @channels]
-          (send! channel (clj-&gt;json result))))
-      (do
-        (doseq [channel @channels]
-          (send! channel (error-&gt;json (:err result))))))))
-</code></pre>
-<pre><code class="language-Clojure">(defn home-page [{:keys [message]}]
-  [:div.container
-   [:div.row
-    [:div.col-md-12
-     [:center
-      [:h3 &quot;Exercise 1: Print out the number 100&quot;]]]]
-   [:div.row
-    [:div.col-sm-6]]
-   [:div.row
-    [:div.row&gt;div.col-sm-12
-      [message-input]
-      [:center
-        [:button.btn.btn-primary 
-          {:on-click #(do 
-          (ws/send-transit-msg! {:message @value})
-          (reset! messages nil)
-          (reset! output @value))                           
-          :style {:font-size &quot;50px&quot;}}
-        &quot;Execute the Python Script&quot;]
-        [:h3 &quot;Output&quot;]
-        (for [x @messages]
-          [:h2 x])
-       ]
-     ]]])
-</code></pre>
-<pre><code class="language-java">(defn- json-&gt;clj [msg]
-  &quot;Converts a JSON-encoded map into a clojure string (clojure.java.string)&quot;
-  (as-&gt; msg result
-    (.getBytes result)
-    (java.io.ByteArrayInputStream. result)
-    (clojure.java.io/input-stream result)
-    (transit/reader result :json)
-    (transit/read result)
-    (:message result)))
-</code></pre>
+<h3 id="1-clojure-execute-python-json-and-websockets">1. <code>Clojure</code> - Execute Python, JSON, and Websockets</h3>
+<p><a href="https://github.com/LukeAlbarracin/snofin-web-cljs/blob/master/src/multi_client_ws/routes/websockets.clj">Source: Websockets.clj</a></p>
+<p> Executes Python, using a Java Library (Clojure has Java interop). The results from whatever Python was executed is parsed out, then sent over to the client via websockets using <a href="https://http-kit.github.io/"> http-kit</a>. This data is sent over in JSON format.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">(</span><span class="kd">defn- </span><span class="nv">execute-python!</span> <span class="p">[</span><span class="nv">msg</span><span class="p">]</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  <span class="s">&quot;Runs a python shell&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">result</span> <span class="p">(</span><span class="nf">shell/sh</span> <span class="s">&quot;python&quot;</span> <span class="s">&quot;-c&quot;</span> <span class="p">(</span><span class="nf">json-&gt;clj</span> <span class="nv">msg</span><span class="p">))]</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">str/blank?</span> <span class="p">(</span><span class="ss">:err</span> <span class="nv">result</span><span class="p">))</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>      <span class="p">(</span><span class="nf">do</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">result</span> <span class="p">(</span><span class="nf">str/split</span> <span class="p">(</span><span class="ss">:out</span> <span class="nv">result</span><span class="p">)</span> <span class="o">#</span><span class="s">&quot;\n&quot;</span><span class="p">)</span> <span class="nv">channel</span> <span class="o">@</span><span class="nv">channels</span><span class="p">]</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>          <span class="p">(</span><span class="nf">send!</span> <span class="nv">channel</span> <span class="p">(</span><span class="nf">clj-&gt;json</span> <span class="nv">result</span><span class="p">))))</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>      <span class="p">(</span><span class="nf">do</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">channel</span> <span class="o">@</span><span class="nv">channels</span><span class="p">]</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>          <span class="p">(</span><span class="nf">send!</span> <span class="nv">channel</span> <span class="p">(</span><span class="nf">error-&gt;json</span> <span class="p">(</span><span class="ss">:err</span> <span class="nv">result</span><span class="p">))))))))</span>
+</code></pre></div>
+<h3 id="2-clojurescript-reagent-and-ui">2. <code>ClojureScript</code> - Reagent and UI</h3>
+<p><a href="https://github.com/LukeAlbarracin/snofin-web-cljs/blob/master/src-cljs/multi_client_ws/core.cljs">Source: Core.cljs</a></p>
+<p><a href="https://github.com/reagent-project/reagent"> Reagent </a> is a minimalistic interface between ClojureScript (CLJS) and React. React components can be composed using CLJS functions and data in hiccup-format. In this project, a button is designed to send over values from an input field via websockets. </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">(</span><span class="kd">defn </span><span class="nv">home-page</span> <span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">message</span><span class="p">]}]</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  <span class="p">[</span><span class="ss">:div.container</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>   <span class="p">[</span><span class="ss">:div.row</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="p">[</span><span class="ss">:div.col-md-12</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>     <span class="p">[</span><span class="ss">:center</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>      <span class="p">[</span><span class="ss">:h3</span> <span class="s">&quot;Exercise 1: Print out the number 100&quot;</span><span class="p">]]]]</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>   <span class="p">[</span><span class="ss">:div.row</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="p">[</span><span class="ss">:div.col-sm-6</span><span class="p">]]</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>   <span class="p">[</span><span class="ss">:div.row</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="p">[</span><span class="ss">:div.row&gt;div.col-sm-12</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>      <span class="p">[</span><span class="nv">message-input</span><span class="p">]</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>      <span class="p">[</span><span class="ss">:center</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        <span class="p">[</span><span class="ss">:button.btn.btn-primary</span> 
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>          <span class="p">{</span><span class="ss">:on-click</span> <span class="o">#</span><span class="p">(</span><span class="k">do </span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>          <span class="p">(</span><span class="nf">ws/send-transit-msg!</span> <span class="p">{</span><span class="ss">:message</span> <span class="o">@</span><span class="nv">value</span><span class="p">})</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>          <span class="p">(</span><span class="nf">reset!</span> <span class="nv">messages</span> <span class="nv">nil</span><span class="p">)</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>          <span class="p">(</span><span class="nf">reset!</span> <span class="nv">output</span> <span class="o">@</span><span class="nv">value</span><span class="p">))</span>                           
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>          <span class="ss">:style</span> <span class="p">{</span><span class="ss">:font-size</span> <span class="s">&quot;50px&quot;</span><span class="p">}}</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>        <span class="s">&quot;Execute the Python Script&quot;</span><span class="p">]</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>        <span class="p">[</span><span class="ss">:h3</span> <span class="s">&quot;Output&quot;</span><span class="p">]</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>        <span class="p">(</span><span class="nb">for </span><span class="p">[</span><span class="nv">x</span> <span class="o">@</span><span class="nv">messages</span><span class="p">]</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>          <span class="p">[</span><span class="ss">:h2</span> <span class="nv">x</span><span class="p">])</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>       <span class="p">]</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>     <span class="p">]]])</span>
+</code></pre></div>
+<h3 id="3-clojure-json-parsing-in-clojure">3. <code>Clojure</code> - JSON Parsing in Clojure</h3>
+<p><a href="https://github.com/LukeAlbarracin/snofin-web-cljs/blob/master/src/multi_client_ws/routes/websockets.clj">Source: Websockets.clj</a></p>
+<p>Converts a JSON-encoded map into a Clojure string utilizing Java interop and the <a href="https://github.com/cognitect/transit-clj">Transit</a> library. </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">(</span><span class="kd">defn- </span><span class="nv">json-&gt;clj</span> <span class="p">[</span><span class="nv">msg</span><span class="p">]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  <span class="s">&quot;Converts a JSON-encoded map into a clojure string (clojure.java.string)&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  <span class="p">(</span><span class="nf">as-&gt;</span> <span class="nv">msg</span> <span class="nv">result</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="p">(</span><span class="nf">.getBytes</span> <span class="nv">result</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="p">(</span><span class="nf">java.io.ByteArrayInputStream.</span> <span class="nv">result</span><span class="p">)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="p">(</span><span class="nf">clojure.java.io/input-stream</span> <span class="nv">result</span><span class="p">)</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="p">(</span><span class="nf">transit/reader</span> <span class="nv">result</span> <span class="ss">:json</span><span class="p">)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="p">(</span><span class="nf">transit/read</span> <span class="nv">result</span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="p">(</span><span class="ss">:message</span> <span class="nv">result</span><span class="p">)))</span>
+</code></pre></div>
 
               
             </article>
@@ -318,7 +355,7 @@ Because of this, I sought out this mini project, to see how simple it is to exec
     <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.22074ed6.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.01de222e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.960e086b.min.js"></script>
       
     
   </body>
