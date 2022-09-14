@@ -1,6 +1,6 @@
 ## Objective
 
-Seeking an interdisciplinary internship or co-op in building on my current strengths and experiential learning.
+Seeking an interdisplinary internship or part-time job, building on my current strengths.
 
 Passionate about how Philosophy and Computer Science blend to solve real world problems.
 
